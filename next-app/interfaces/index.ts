@@ -8,3 +8,8 @@ export type User = {
   id: number
   name: string
 }
+
+export type Pokemon = {
+  name: string
+  url: string
+}
