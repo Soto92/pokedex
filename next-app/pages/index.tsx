@@ -1,15 +1,33 @@
-import Link from 'next/link'
-import Layout from '../components/Layout'
+const Home = ({items}: any) => {
 
-const IndexPage = () => (
-  <Layout title="Home | Next.js + TypeScript Example">
-    <h1>Hello Next.js 👋</h1>
-    <p>
-      <Link href="/about">
-        <a>About</a>
-      </Link>
-    </p>
-  </Layout>
-)
+  return (
+    <div title="Pokédex">
+      <h1>Choose your Pokémon</h1>
+      
+      <ul>
+        {items.map((item: any) => <li>{item.name}</li>)}
+      </ul>
+    </div>
+  )
+}
 
-export default IndexPage
+Home.getInitialProps = async () => {
+  const apiUrl = 'http://localhost:3000/api/pokedex'
+
+  try {
+    const response = await fetch(apiUrl)
+
+    if (response.status === 200) {
+      const items = await response.json()
+      return { items }
+    }
+  } catch (error) {
+    const { response } = error
+
+    const resultError = response ? response.statusText : error.message
+
+    return resultError
+  }
+}
+
+export default Home

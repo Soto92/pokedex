@@ -8,7 +8,7 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
       query: {  qtd }
     } = _req;
 
-    const limit = qtd || 3
+    const limit = qtd || 10
 
     const result = await fetch(`${API_URL}/pokemon?limit=${limit}`)
     const json = await result.json()
