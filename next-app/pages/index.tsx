@@ -1,11 +1,24 @@
-const Home = ({items}: any) => {
+import {Pokemon} from '../interfaces/pokemon'
+import Link from 'next/link';
 
+export interface HomeProps {
+  pokemons: Pokemon[];
+}
+
+const Home = (props: HomeProps) => {
+  const {pokemons} = props;
   return (
     <div title="Pokédex">
       <h1>Choose your Pokémon</h1>
       
       <ul>
-        {items.map((item: any) => <li>{item.name}</li>)}
+        {pokemons.map((pokemon: Pokemon, index: number) => (
+          <li key={index}>
+            <Link href={`/pokemon/${pokemon.id}`}>
+              {pokemon.name}
+            </Link>
+          </li>
+        )) }
       </ul>
     </div>
   )
@@ -16,10 +29,10 @@ Home.getInitialProps = async () => {
 
   try {
     const response = await fetch(apiUrl)
-
     if (response.status === 200) {
-      const items = await response.json()
-      return { items }
+      const pokemons = await response.json()
+
+      return { pokemons }
     }
   } catch (error) {
     const { response } = error
