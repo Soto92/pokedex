@@ -1,0 +1,7 @@
+<pre *ngIf="!loading; else loadingSpan">
+  {{ pokemons$ | async | json }}
+</pre>
+
+<ng-template #loadingSpan>
+  <span>Carregando ...</span>
+</ng-template>
