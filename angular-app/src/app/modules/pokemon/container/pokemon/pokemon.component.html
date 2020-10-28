@@ -1,1 +1,9 @@
-<p>pokemon works!</p>
+<div *ngIf="pokemon">
+  <span> Pokemon {{ pokemon.name }} </span>
+  <h4>Stats:</h4>
+  <ul>
+    <li *ngFor="let stat of pokemon.stats">
+      {{stat.stat.name}}: {{stat.base_stat}}
+    </li>
+  </ul>
+</div>
