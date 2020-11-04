@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { map, finalize } from 'rxjs/operators';
+import { PokemonListItem } from '../../../../interfaces/pokemon';
 import { PokedexService } from '../../../../services/pokedex.service';
 
 @Component({
@@ -9,36 +10,38 @@ import { PokedexService } from '../../../../services/pokedex.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  pokemon = new BehaviorSubject([]);
-  pokemons$: Observable<any[]> = this.pokemon.asObservable();
-
+  pokemons = [];
   loading = true;
 
   private subscriptions = new Subscription();
 
   constructor(private service: PokedexService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.getPokemons();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
-  getPokemons(limit?: number) {
+  getPokemons(limit?: number): void {
     this.subscriptions.add(
       this.service
         .getPokemons(limit)
         .pipe(
-          map((pokemon) => pokemon.results),
+          map((response) => response.results.map(pokemon => ({
+            ...pokemon,
+            id: pokemon.url.split('/').reverse()[1]
+          }))),
           finalize(() => {
             this.loading = false;
           })
         )
-        .subscribe((pokemons: any[]) => {
-          this.pokemon.next(pokemons);
+        .subscribe((pokemons: PokemonListItem[]) => {
+          this.pokemons = pokemons;
         })
     );
   }
 }
+
