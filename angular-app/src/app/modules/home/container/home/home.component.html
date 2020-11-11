@@ -1,0 +1,11 @@
+<div>
+  <h1>Choose your Pokémon</h1>
+
+  <ol>
+    <li *ngFor="let pokemon of pokemons; let i = index">
+      <a [routerLink]="'/pokemon/' + pokemon.id">
+        {{ pokemon.name }}
+      </a>
+    </li>
+  </ol>
+</div>
